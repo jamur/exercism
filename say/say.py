@@ -1,13 +1,17 @@
 '''
 Say numbers in english
 '''
+# Define lists for number representations
 UNITS = 'zero one two three four five six seven eight nine'.split()
 ELEVENS = 'ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split()
 TENS = 'zero ten twenty thirty forty fifty sixty seventy eighty ninety'.split()
 MULT = ['', 'thousand', 'million', 'billion', 'trillion']
 
+# Convert numbers from 1 to 99 into textual representation
 def say_up_to_99(number):
-    ''' say numbers up to 99 '''
+    '''
+    Convert a number from 1 to 99 into its textual representation.
+    '''
     if 0 <= number <= 9:
         return UNITS[number]
     if 10 <= number <= 19:
@@ -17,8 +21,11 @@ def say_up_to_99(number):
         return TENS[quotient] + '-' + UNITS[remainder]
     return TENS[quotient]
 
+# Convert numbers from 1 to 999 into textual representation
 def say_up_to_999(number):
-    ''' say numbers up to 999 '''
+    '''
+    Convert a number from 1 to 999 into its textual representation.
+    '''
     if 0 <= number <= 99:
         return say_up_to_99(number)
     if 100 <= number <= 999:
@@ -27,16 +34,23 @@ def say_up_to_999(number):
             return UNITS[centena] + ' hundred'
         return UNITS[centena] + ' hundred' + ' ' + say_up_to_99(dezena)
 
+# Main function to convert a number into textual representation
 def say(number):
-    ''' function to say a number '''
+    '''
+    Convert a number into its textual representation.
+    '''
     if not 0 <= number < 1e12:
         # no negative or too big numbers
         raise ValueError("input out of range")
     to_say = say_inner(number)
     return to_say
 
+# Recursive helper function for numbers with multiple units (thousands, millions, etc.)
 def say_inner(number, mult=0):
-    ''' helper recursive function '''
+    '''
+        Convert a number with multiple units (thousands, millions, etc.)
+    into its textual representation.
+    '''
     # base case
     if number < 1000:
         to_say = say_up_to_999(number)
