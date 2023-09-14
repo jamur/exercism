@@ -1,64 +1,121 @@
+'''
+Say numbers in english
+'''
 UNITS = 'zero one two three four five six seven eight nine'.split()
 ELEVENS = 'ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split()
 TENS = 'zero ten twenty thirty forty fifty sixty seventy eighty ninety'.split()
-MULT = 'thousand million billion trillion'.split()
-MULT.insert(0, '')
+MULT = ['', 'thousand', 'million', 'billion', 'trillion']
 
 def say_up_to_99(number):
     ''' say numbers up to 99 '''
-    if 1 <= number <= 9:
+    if 0 <= number <= 9:
         return UNITS[number]
     if 10 <= number <= 19:
         return ELEVENS[number % 10]
     quotient, remainder = divmod(number, 10)
-    if quotient == 0:
-        return ''
-    to_say = TENS[quotient]
     if remainder:
-        to_say += '-' + UNITS[remainder]
-    return to_say
+        return TENS[quotient] + '-' + UNITS[remainder]
+    return TENS[quotient]
 
 def say_up_to_999(number):
     ''' say numbers up to 999 '''
-    if number == 0:
-        return 'zero'
-    if 1 <= number <= 9:
-        return UNITS[number]
-    if 10 <= number <= 19:
-        return ELEVENS[number % 10]
-    if 20 <= number <= 99:
+    if 0 <= number <= 99:
         return say_up_to_99(number)
     if 100 <= number <= 999:
         centena, dezena = divmod(number, 100)
-        space = ' ' if dezena > 0 else ''
-        return UNITS[centena] + ' hundred' + space + say_up_to_99(dezena)
+        if dezena == 0:
+            return UNITS[centena] + ' hundred'
+        return UNITS[centena] + ' hundred' + ' ' + say_up_to_99(dezena)
 
 def say(number):
-    if not 0 <= number < 1_000_000_000_000:
-        # if the number is negative or too big
+    ''' function to say a number '''
+    if not 0 <= number < 1e12:
+        # no negative or too big numbers
         raise ValueError("input out of range")
-    to_say, _ = say_inner(number)
+    to_say = say_inner(number)
     return to_say
 
 def say_inner(number, mult=0):
+    ''' helper recursive function '''
     # base case
     if number < 1000:
         to_say = say_up_to_999(number)
-        if mult:
+        if number and mult:
             to_say += ' ' + MULT[mult]
-        return to_say, True # True mark the last iteration
-    quotient, remainder = divmod(number, 1000)
-    to_say = ''
-    if quotient:
-        to_say, last = say_inner(quotient, mult + 1)
-    if remainder:
-        if not last:
-            to_say +=  ' ' + MULT[mult + 1]
-        to_say += ' ' + say_inner(remainder)[0]
-    return to_say, False # False marks not the last iteration
+        return to_say
 
+    quocient, remainder = divmod(number, 1000)
+
+    to_say = ''
+
+    if quocient:
+        to_say = say_inner(quocient, mult + 1)
+
+    if remainder:
+        to_say += ' ' + say_inner(remainder, mult)
+
+    return to_say
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# test
 if __name__ == '__main__':
-    for number in [2000000,1000,987_654_321_123, 1_000_001_000]:
+    for number in [0, 2000001, 2_000_010_000, 1_000_001_000, 2_001_001_001,
+                   100000, 987654321123]:
         print(number, say(number))
 
 
@@ -69,6 +126,9 @@ if __name__ == '__main__':
 
 
 
+
+
+# historic
 '''
 def say(number):
     # if the number is negative or too big
@@ -117,3 +177,10 @@ def say(number):
             to_say += ' ' + say_to_999(remainder)
         return to_say
 '''
+
+#if (remainder * 10 ** (mult * 3)) >= (1 * 10 ** ((mult + 1) * 3)):
+
+
+    # adds mult word only if doesn't have one
+    # if to_say.split()[-1] not in MULT:
+    #     to_say +=  ' ' + MULT[mult + 1]
