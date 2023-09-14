@@ -1,6 +1,6 @@
 from string import ascii_lowercase, ascii_uppercase
 
-def rotate_alphabet(text, key):
+def rotate(text, key):
     ciphered = ''
     for letter in text:
         if letter.isupper():
