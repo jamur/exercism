@@ -6,6 +6,9 @@ class Luhn:
         return self.is_valid
 
     @staticmethod
+    def luhny_tune(digit: str) -> int:
+        return dbl - 9 if (dbl := int(digit) * 2) > 9 else dbl
+    @staticmethod
     def is_valid_luhn(num):
         num = num.replace(' ', '')
         if len(num) < 2:
@@ -14,13 +17,10 @@ class Luhn:
             return False
         sum_digits = \
             sum(
-                dbl - 9         # even positions, double: if > 9, -9
-                if idx % 2 and (dbl := int(digito) * 2) > 9
-            else
-                dbl             # even positions, double <= 9
+                Luhn.luhny_tune(digit) # even positions, double: if > 9, -9
                 if idx % 2
             else
-                int(digito)     # odd positions: same number
-            for idx, digito in enumerate(reversed(num))
+                int(digit)             # odd positions: same number
+            for idx, digit in enumerate(reversed(num))
             )
         return not sum_digits % 10
